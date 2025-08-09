@@ -1,0 +1,12 @@
+type:base
+name:Configure Ubuntu dock
+Configures the Ubuntu GNOME dock according to personal preference: 
+
+- Positioned at the bottom of the screen
+- Icon size: 26
+- Icons centered
+- Auto-hide off
+- Use whole screen width (instead of a floating panel)
+- Don't show mounts
+
+I find this style works well for virtual machines running in VMWare Workstation (not in full screen mode), where having additional screen width is a benefit.

@@ -1,0 +1,9 @@
+type:workstation
+name:Install Virtual Studio Code extensions
+Install the following Virtual Studio Code @VSCode extensions:
+
+- Data Wrangler: `ms-toolsai.datawrangler` @VSCodeDataWrangler
+- Jupyter: `ms-toolsai.jupyter` @VSCodeJupyter
+- Python: `ms-python.python` @VSCodePython
+- Quarto: `quarto.quarto` @VSCodeQuarto
+- PostgreSQL: `ms-ossdata.vscode-pgsql` @VSCodePostgres

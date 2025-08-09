@@ -1,0 +1,3 @@
+type:base
+name:Install Brave browser
+Installs the Brave @Brave internet browser. Also installs curl @Curl, used to download apt source and signature @BraveInstallLinux.

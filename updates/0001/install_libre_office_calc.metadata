@@ -1,0 +1,5 @@
+type:workstation
+name:Install Libre Office Calc
+Installs the Libre Office Calc @LibreOfficeCalc spreadsheet program, useful for working with tabulated data on Linux e.g. `.csv` or `.xlsx` files. 
+
+The full version of Libre Office @LibreOffice can be installed instead if required: `sudo apt install libreoffice`.

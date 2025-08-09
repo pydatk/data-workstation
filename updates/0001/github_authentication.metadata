@@ -1,0 +1,9 @@
+type:workstation
+name:Authenticate with GitHub
+Install git and GitHub CLI @GitHubCLI.
+
+Authenticate with GitHub @GitHubAuth and set username @GitHubUsername and commit email address @GitSetEmail.
+
+This update sets username and email address globally. If you want to set username and email addresses specific to each repository, you will need to do it manually.
+
+Change your email settings in GitHub before applying this update if you would prefer to keep your commit email address private. If you don't, it will be visible on any public repository you commit to @GitHubSetEmailPrivate.

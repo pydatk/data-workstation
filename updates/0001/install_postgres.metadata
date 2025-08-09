@@ -1,0 +1,3 @@
+type:workstation
+name:Install PostgreSQL
+Install PostgreSQL and set a password for the `postgres` password. See [my blog post](https://www.pydatk.com/posts/installing_postgresql_on_ubuntu_linux/) for a detailed overview of installing and using Postgres on Linux.

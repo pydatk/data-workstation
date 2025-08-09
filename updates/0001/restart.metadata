@@ -1,0 +1,3 @@
+type:base
+name:Restart required after initial setup
+Machine needs to be restarted after initial setup. Re-run setup after system reboot to complete final steps.
