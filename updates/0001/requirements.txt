@@ -1,0 +1,7 @@
+ipykernel
+openpyxl
+pandas
+pandera
+pandera[io]
+psycopg2
+sqlalchemy

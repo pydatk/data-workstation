@@ -1,0 +1,5 @@
+type:base
+name:Prevent power saving
+Prevent power saving features including lid close behaviour, low battery behaviour, sleep mode and screen blank on idle.
+
+This can be useful for keeping VMs awake while still working on another VM or the host.

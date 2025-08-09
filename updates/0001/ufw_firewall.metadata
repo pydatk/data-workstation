@@ -1,0 +1,5 @@
+type:base
+name:Setup ufw firewall
+ufw _is for managing a Linux firewall and aims to provide an easy to use interface for the user._ @UbuManUfw.
+Sets up simple firewall rules (deny incoming, allow outgoing), enables the firewall then checks status. Based on a guide to ufw setup by DigitalOcean @DigOceanUfw.
+After setting up the firewall, check out DigitalOcean's tutorial on testing firewall security @DigOceanTestFirewall.

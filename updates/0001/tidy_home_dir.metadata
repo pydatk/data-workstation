@@ -1,0 +1,7 @@
+type:workstation
+name:Tidy up home directory
+Add ~/tmp and ~/.tmp-archive directories (.tmp-archive is used by ). Hide directories and files from workstation home directory. Change XDG default file locations.
+
+As part of the `data-workstation` system check, if this update has been applied, files in `~/tmp` will be archived to `~/.tmp-archive`. Any content of the unused XDG default locations will be moved to `~/tmp`.
+
+References: @Zip @BashAlias @HideFilesTerminal
