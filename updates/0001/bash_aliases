@@ -1,0 +1,1 @@
+alias ls="sed 's/^/-I \"/' .hidden 2>/dev/null | sed 's/$/\"/' | tr '\n' ' ' | xargs ls --color=auto"

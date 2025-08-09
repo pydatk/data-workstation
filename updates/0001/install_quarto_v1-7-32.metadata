@@ -1,0 +1,3 @@
+type:workstation
+name:Install Quarto v1.7.32
+Install the Quarto @Quarto publishing system. This update installs v1.7.32 (currently the latest). I use this system for [my own blog](https://www.pydatk.com/).

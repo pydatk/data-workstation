@@ -1,0 +1,12 @@
+type:workstation
+name:Set favorite apps
+Sets favorite app icons on the dock.
+
+- VS Code
+- Terminal
+- Calculator
+- System Monitor
+- LibreOffice Calc
+- Text Editor
+- Brave Browser
+- Nautilus
