@@ -1,4 +1,4 @@
- #!/usr/bin/bash
+#!/usr/bin/bash
 set -e
 
 echo -e "\ndata-workstation"
@@ -297,7 +297,7 @@ function system_check() {
         # archive existing tmp content
         now=$(date +"%Y%m%d-%H%M%S")
         mkdir -p $HOME/temp
-        zip -r -9 -q -T -m "$HOME/archive/temp-$now" /home/sandbox/temp
+        zip -r -9 -q -T -m "$HOME/archive/temp-$now" "$HOME/temp"
         mkdir -p $HOME/temp
     else
         log_message "DEBUG" "tidy-home option not set"
