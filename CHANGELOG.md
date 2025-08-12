@@ -15,6 +15,7 @@ N/A
 ### Fixed
 
 - Incorrect python.defaultInterpreterPath #27
+- psycopg2 install fails #28
 
 ### Changed
 

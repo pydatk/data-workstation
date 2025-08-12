@@ -1,0 +1,3 @@
+type:workstation
+name:Install dependencies for psycopg2
+Install dependencies for psycopg2 @Psycopg2, a Python/PostgreSQL interface. 
