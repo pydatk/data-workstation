@@ -237,8 +237,8 @@ function end_data_workstation() {
 function setup() {
     # apt update / upgrade (runs at start of setup each time)
     log_message "INFO" "Applying apt update / upgrade"
-    try_command "sudo apt update" "apt update"
-    try_command "sudo apt upgrade" "apt upgrade"        
+    try_command "sudo apt -y update" "apt update"
+    try_command "sudo apt -y upgrade" "apt upgrade"        
     # check for OS version change as result of apt update/upgrade
     check_os
     # initial setup

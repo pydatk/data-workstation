@@ -6,7 +6,7 @@ Format is based on: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 data-workstation uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Next release
+## [0.3.0] - <mark>2025-??????????????????</mark>
 
 ### Added
 
@@ -20,6 +20,7 @@ N/A
 ### Changed
 
 - README: Project module tasks #21
+- Install apt packages (and apt update/upgrade) without prompt #26
 
 ### Removed
 

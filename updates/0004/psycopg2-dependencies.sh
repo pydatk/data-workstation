@@ -1,5 +1,5 @@
 #!/usr/bin/bash
 set -e
 
-sudo apt install python3-dev
-sudo apt install libpq-dev
+sudo apt -y install python3-dev
+sudo apt -y install libpq-dev
