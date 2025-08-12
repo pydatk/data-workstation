@@ -6,6 +6,24 @@ Format is based on: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 data-workstation uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Next release
+
+### Added
+
+N/A
+
+### Fixed
+
+- Incorrect python.defaultInterpreterPath #27
+
+### Changed
+
+- README: Project module tasks #21
+
+### Removed
+
+N/A
+
 ## [0.2.0] - 2025-08-12
 
 ### Added
