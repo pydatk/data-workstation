@@ -370,7 +370,7 @@ function project() {
     if [ $input == "y" ] || [ $input == "Y" ]; then
         mkdir -p $HOME/projects/$projectdir/$gitrepo/.vscode
         echo -e "{" > $HOME/projects/$projectdir/$gitrepo/.vscode/settings.json
-        echo -e "    \"python.defaultInterpreterPath\": \"$HOME/venv/$projectdir-$venvts/bin/python\"" >> $HOME/projects/$projectdir/$gitrepo/.vscode/settings.json 
+        echo -e "    \"python.defaultInterpreterPath\": \"$HOME/venvs/$projectdir-$venvts/bin/python\"" >> $HOME/projects/$projectdir/$gitrepo/.vscode/settings.json 
         echo -e "}" >> $HOME/projects/$projectdir/$gitrepo/.vscode/settings.json 
     fi
 

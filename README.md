@@ -77,6 +77,13 @@ Setup a project:
 $ ./data-workstation.sh project
 ```
 
+After setting up a project, there are a few optional additional steps:
+
+- In VS Code, press `F1` then `Python: Select interpreter`. Choose the option `Use Python from python.defaultInterpreterPath setting`. Close then reopen any terminal windows. The name of the Python virtual environment should appear: `(data-workstation-250811-2107) ... $`.
+- To install packages using pip, use the python command in the virtual environment explicitly. If pip is called accidentally without an active virtual environment, it will install packages to the global Python.
+    - To install a named package: `(intranet-250811-1124) dev@dev:~/projects/intranet/intranet$ ~/venvs/intranet-250811-1124/bin/python -m pip install <<package_name>>`
+    - To install all packages in the `requirements.txt` file: `(intranet-250811-1124) dev@dev:~/projects/intranet/intranet$ ~/venvs/intranet-250811-1124/bin/python -m pip install -r requirements.txt`
+
 ### Backup module
 
 Create a backup:
