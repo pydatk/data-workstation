@@ -50,6 +50,17 @@ version=$(head -n 1 .version)
 version=$(echo "$version" | cut -d ":" -f 2)
 log_message "DEBUG" "data-workstation version: $version"
 
+# check that latest version is being used
+log_message "DEBUG" "Getting latest available data-workstation version"
+wget https://raw.githubusercontent.com/pydatk/data-workstation/refs/heads/main/.version -O /tmp/.latest-version
+latest=$(head -n 1 /tmp/.latest-version)
+latest=$(echo "$latest" | cut -d ":" -f 2)
+if [ "$latest" == "$version" ]; then
+    log_message "DEBUG" "Latest data-workstation version installed."
+else
+    log_message "WARNING" "Version $latest of data-workstation is available. Installed version: $version"
+fi
+
 function check_os() {
 
     # get currently installed os
