@@ -10,7 +10,6 @@ read -p "Press any key to continue..."
 echo "Making directories"
 mkdir -p "$HOME/.data-workstation"
 mkdir -p "$HOME/.data-workstation/.updates"
-mkdir -p "$HOME/.data-workstation/.updates/.0001"
 mkdir -p "$HOME/temp"
 mkdir -p "$HOME/archive"
 mkdir -p "$HOME/projects"
@@ -104,14 +103,24 @@ if [ ! $1 ]; then
 else
     if [ $1 == "setup" ]; then
         module="setup"
-        if [ ! $2 ]; then
-            log_message "CRITICAL" "Module $module needs automated (unattended) setup option: [auto-none, auto-base, auto-all]"
-        elif [ $2 == "auto-none" ] || [ $2 == "auto-base" ] || [ $2 == "auto-all" ]; then
-            auto=$2
-            log_message "DEBUG" "Automated setup option: $auto"
+        if [ -f "$HOME/.data-workstation/.auto-option" ]; then
+            auto=$(cat "$HOME/.data-workstation/.auto-option")
         else
-            log_message "CRITICAL" "Invalid automated setup option: $2"
+            echo -e "\nMachine type:"
+            echo "1. Base"
+            echo "2. Workstation"
+            read -p "Choose an option [1,2]: " mtype
+            if [ "$mtype" == "1" ]; then
+                auto="auto-base"
+                echo $auto > "$HOME/.data-workstation/.auto-option"
+            elif [ "$mtype" == "2" ]; then
+                auto="auto-all"
+                echo $auto > "$HOME/.data-workstation/.auto-option"
+            else
+                log_message "CRITICAL" "Option not recognised: $mtype"
+            fi
         fi
+        log_message "DEBUG" "Auto option: $auto"
     elif [ $1 == "project" ]; then
         module="project"
     elif [ $1 == "backup" ]; then
@@ -121,29 +130,6 @@ else
     fi
 fi
 log_message "DEBUG" " Module ready: $module"
-
-# function: confirm whether to apply update
-#    arg 1: update type (base or workstation)
-#    arg 2: update reference
-function confirm_update() {
-    conf=0
-    if [ $auto == "auto-all" ]; then
-        log_message "DEBUG" "Confirmation not required (auto update option = $auto) for $1 update: $2"
-        conf=1
-    elif [ $auto == "auto-base" ] && [ $1 == "base" ]; then
-        log_message "DEBUG" "Confirmation not required (auto update option = $auto) for $1 update: $2"
-        conf=1
-    else
-        read -p "Apply $1 update: $2? [y,n] " input
-        if [ $input == "y" ] || [ $input == "Y" ]; then
-            conf=1
-            log_message "INFO" "User accepted $1 update: $2"
-        else
-            conf=0
-            log_message "INFO" "User declined $1 update: $2"
-        fi
-    fi
-}
 
 # function: try to run command and catch error if occurs
 #    arg 1: command to run
@@ -165,7 +151,7 @@ function try_command() {
 }
 
 function apply_update() {
-    conf=0
+    apply=0
     # get update version
     updateversion=$(echo "$1" | cut -d "/" -f 1)
     lookup=$(grep "$updateversion" .version)
@@ -215,21 +201,30 @@ function apply_update() {
     echo "Update description:"
     echo $desc
     echo "----------------------------------------------------------"
+    # create dir for update history files
+    mkdir -p "$HOME/.data-workstation/.updates/.$updateversion"
     # get data (for outputting to update history)
     now=$(date +"%Y-%m-%d %H:%M:%S.%3N")
     # check if update has already been applied
     if [ -f "$HOME/.data-workstation/.updates/.$updateversion/.$updatecode" ]; then
         log_message "DEBUG" "Skipping update (already done): $updateversion $updatecode"
-        echo "$now Skipping (already done)" >> "$HOME/.data-workstation/.updates/.$updateversion/.$updatecode"
     else
-        confirm_update "$type" "$name"
-        if [ $conf != 1 ]; then
-            log_message "INFO" "Skipping update (declined): $updateversion $updatecode"
-            echo "$now Skipping (declined)" >> "$HOME/.data-workstation/.updates/.$updateversion/.$updatecode"
+        if [ $auto == "auto-all" ]; then
+            log_message "DEBUG" "Will apply $type update: $name"
+            apply=1
+        elif [ $auto == "auto-base" ] && [ $type == "base" ]; then
+            log_message "DEBUG" "Will apply $type update: $name"
+            apply=1
+        else
+            log_message "DEBUG" "Will not apply $type update: $name"
+        fi
+        if [ $apply != 1 ]; then
+            log_message "INFO" "Skipped update : $updateversion $updatecode"
+            echo "skipped" >> "$HOME/.data-workstation/.updates/.$updateversion/.$updatecode"
         else
             log_message "INFO" "Applying update: $updateversion $updatecode"
             try_command "updates/$updateversion/$updatecode.sh" $name
-            echo "$now Applied ok" >> "$HOME/.data-workstation/.updates/.$updateversion/.$updatecode"
+            echo "applied" >> "$HOME/.data-workstation/.updates/.$updateversion/.$updatecode"
         fi
     fi
 }
@@ -241,15 +236,9 @@ function end_data_workstation() {
 
 function setup() {
     # apt update / upgrade (runs at start of setup each time)
-    confirm_update "base" "apt update / upgrade"
-    if [ $conf == 1 ]; then
-        log_message "INFO" "Applying apt update / upgrade"
-        try_command "sudo apt update" "apt update"
-        try_command "sudo apt upgrade" "apt upgrade"        
-    else
-        log_message "DEBUG" "Skipped apt update / upgrade (declined)"
-    fi
-    conf=1
+    log_message "INFO" "Applying apt update / upgrade"
+    try_command "sudo apt update" "apt update"
+    try_command "sudo apt upgrade" "apt upgrade"        
     # check for OS version change as result of apt update/upgrade
     check_os
     # initial setup
@@ -269,7 +258,7 @@ function setup() {
     apply_update "0001/install_dconf_editor"
     # restart (necessary after initial setup)
     apply_update "0001/restart"
-    if [ $conf == 1 ]; then
+    if [ $apply == 1 ]; then
         end_data_workstation
     fi
     # UI configuration
@@ -280,7 +269,7 @@ function setup() {
     apply_update "0001/github_authentication"
     # final restart
     apply_update "0001/final_restart"
-    if [ $conf == 1 ]; then
+    if [ $apply == 1 ]; then
         end_data_workstation
     fi
 }
