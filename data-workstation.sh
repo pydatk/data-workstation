@@ -345,7 +345,7 @@ function project() {
         fn="$HOME/projects/$projectdir/$gitrepo/deploy-quarto.sh"
         echo "#!/usr/bin/bash" > $fn
         echo "set -e" >> $fn
-        echo "$HOME/data-workstation/data-workstation.sh deploy-www $HOME/projects/$projectdir/$gitrepo/quarto/_site/index.html /var/www/html/$projectdir/" >> $fn
+        echo "$HOME/data-workstation/data-workstation.sh deploy-www $HOME/projects/$projectdir/$gitrepo/quarto/_site/ /var/www/html/$projectdir/" >> $fn
         chmod +x $fn
     fi
 

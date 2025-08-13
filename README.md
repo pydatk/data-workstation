@@ -104,14 +104,18 @@ $ ./data-workstation.sh deploy-www /home/data-workstation-inc-all/projects/my_we
 
 The trailing slashes are necessary, otherwise content will be copied to directory `/var/www/html/published/my_website` instead of `/var/www/html/published`.
 
-#### Automatic deployment after Quarto render
+#### Deploying Quarto websites
 
-Web content can be set to deploy automatically after `quarto render` by setting the `post-render` option in `_quarto.yml`.
+Any Quarto website output directory can be used as with `deploy-www`.
+
+If you used the Quarto option in `data-workstation project` to setup the website, there will be a `deploy-quarto.sh` file in the project root. Running this will deploy the `_site` output directory to `/var/www/html/yourproject`, available via `http://localhost/yourproject`. You will need to use `quarto render` to create the output directory first.
+
+This process can be automated by setting the `post-render` option in `_quarto.yml`:
 
 ```
 project:
   type: website
-  post-render: 
+  post-render: ../deploy-quarto.sh
 ```
 
 ## Tools
