@@ -342,12 +342,17 @@ function project() {
         pushd $HOME/projects/$projectdir/$gitrepo
         quarto create --no-open project website quarto
         popd
+        fn="$HOME/projects/$projectdir/$gitrepo/deploy-quarto.sh"
+        echo "#!/usr/bin/bash" > $fn
+        echo "set -e" >> $fn
+        echo "$HOME/data-workstation/data-workstation.sh deploy-www $HOME/projects/$projectdir/$gitrepo/quarto/_site/index.html /var/www/html/$projectdir/" >> $fn
+        chmod +x $fn
     fi
 
     echo ""
     read -p "Customize .gitignore? [y,n] " input
     if [ $input == "y" ] || [ $input == "Y" ]; then
-        echo -e "# custom\n.vscode/\nnotes\n" > /tmp/.gitignore
+        echo -e "# custom\n.vscode/\nquarto/\ndeploy-quarto.sh\n" > /tmp/.gitignore
         cat $HOME/projects/$projectdir/$gitrepo/.gitignore >> /tmp/.gitignore
         mv /tmp/.gitignore $HOME/projects/$projectdir/$gitrepo/.gitignore
     fi
