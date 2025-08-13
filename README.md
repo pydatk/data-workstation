@@ -39,7 +39,7 @@ The easiest way to install and update `data-workstation` is by cloning the publi
 
 To install git: `sudo apt install git`
 
-To clone the `data-workstation` repository into `~/data-workstation` (you can replace `~/data-workstation` with any directory suitable for cloning the repository to):
+To clone the `data-workstation` repository into `~/data-workstation`:
 
 ```
 $ git clone https://github.com/pydatk/data-workstation.git ~/data-workstation/
@@ -61,7 +61,7 @@ Go to the directory where you cloned `data-workstation`:
 $ cd ~/data-workstation
 ```
 
-### Setup module
+### setup
 
 Run the setup module to apply updates. With the `auto-none` option, you will be asked for confirmation before applying each update.
 
@@ -69,7 +69,7 @@ Run the setup module to apply updates. With the `auto-none` option, you will be 
 $ ./data-workstation.sh setup auto-none
 ```
 
-### Project module
+### project
 
 Setup a project:
 
@@ -84,13 +84,17 @@ After setting up a project, there are a few optional additional steps:
     - To install a named package: `(intranet-250811-1124) dev@dev:~/projects/intranet/intranet$ ~/venvs/intranet-250811-1124/bin/python -m pip install <<package_name>>`
     - To install all packages in the `requirements.txt` file: `(intranet-250811-1124) dev@dev:~/projects/intranet/intranet$ ~/venvs/intranet-250811-1124/bin/python -m pip install -r requirements.txt`
 
-### Backup module
+### backup
 
 Create a backup:
 
 ```
 $ ./data-workstation.sh project
 ```
+
+### deploy-www
+
+<mark>to do</mark>
 
 ## Tools
 

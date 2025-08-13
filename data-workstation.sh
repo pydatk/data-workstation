@@ -45,7 +45,7 @@ function log_message() {
 log_message "INFO" "=== data-workstation started ==="
 
 # get project version
-version=$(head -n 1 .version)
+version=$(head -n 1 "$HOME/data-workstation/.version")
 version=$(echo "$version" | cut -d ":" -f 2)
 log_message "DEBUG" "data-workstation version: $version"
 
@@ -79,7 +79,7 @@ function check_os() {
 
     # check if OS is supported
     set +e 
-    grout=$(grep "$current_os" .os-support)
+    grout=$(grep "$current_os" "$HOME/data-workstation/.os-support")
     if [ $? != 0 ]; then
         set -e
         log_message "CRITICAL" "Installed Operating System not supported: $current_os"
@@ -125,6 +125,18 @@ else
         module="project"
     elif [ $1 == "backup" ]; then
         module="backup"
+    elif [ $1 == "deploy-www" ]; then
+        module="deploy-www"
+        if [ "$2" == "" ]; then
+            log_message "CRITICAL" "Please specify input and output paths for deploy-www"
+        else
+            wwwin=$2
+        fi
+        if [ "$3" == "" ]; then
+            log_message "CRITICAL" "Please specify input and output paths for deploy-www"
+        else
+            wwwout=$3
+        fi
     else
         log_message "CRITICAL" "Invalid module: $1"
     fi
@@ -252,6 +264,7 @@ function setup() {
     apply_update "0001/revoke_postgres_db_public"
     apply_update "0001/install_quarto_v1-7-32"
     apply_update "0004/install_python_venv"
+    apply_update "0004/psycopg2-dependencies"
     apply_update "0001/install_vs_code"
     apply_update "0001/install_vs_code_extensions"
     apply_update "0001/install_libre_office_calc"
@@ -267,6 +280,7 @@ function setup() {
     apply_update "0001/set_favorite_apps"
     # installs after initial restart
     apply_update "0001/github_authentication"
+    apply_update "0004/install_nginx.sh"
     # final restart
     apply_update "0001/final_restart"
     if [ $apply == 1 ]; then
@@ -484,6 +498,17 @@ function backup() {
 
 }
 
+function deploy-www() {
+    log_message "DEBUG" "Copying files from $wwwin to $wwwout"
+    try_command "rsync -r --delete $wwwin $wwwout"
+    log_message "DEBUG" "Changing permissions in $wwwout"
+    try_command "sudo chown $USER:www-data -R $wwwout"
+    try_command "sudo chmod u=rwX,g=srX,o=rX -R $wwwout"
+    try_command "sudo find $wwwout -type d -exec chmod g=rwxs "{}" \;"
+    try_command "sudo find $wwwout -type f -exec chmod g=rws "{}" \;"
+    log_message "DEBUG" "deploy-www finished OK"
+}
+
 # run module
 if [ $module == "setup" ]; then    
     log_message "INFO" "Started $module"
@@ -492,7 +517,7 @@ if [ $module == "setup" ]; then
     # to do system check
     system_check 
     log_message "INFO" "Finished $module"
-elif [ $module == "backup" ] || [ $module == "project" ]; then
+elif [ $module == "backup" ] || [ $module == "project" ] || [ $module == "deploy-www" ]; then
     log_message "INFO" "Started $module"
     system_check # do security check before module
     $module
