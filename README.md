@@ -94,7 +94,7 @@ $ ./data-workstation.sh project
 
 ### deploy-www
 
-<mark>to do</mark>
+The `deploy-www` module publishes web content in the given input directory to the given output directory and sets permissions for nginx.
 
 ## Tools
 

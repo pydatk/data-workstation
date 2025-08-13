@@ -504,8 +504,9 @@ function deploy-www() {
     log_message "DEBUG" "Changing permissions in $wwwout"
     try_command "sudo chown $USER:www-data -R $wwwout"
     try_command "sudo chmod u=rwX,g=srX,o=rX -R $wwwout"
-    try_command "sudo find $wwwout -type d -exec chmod g=rwxs "{}" \;"
-    try_command "sudo find $wwwout -type f -exec chmod g=rws "{}" \;"
+    # can't use try_command with find
+    sudo find /var/www/html -type d -exec chmod g=rwxs "{}" \;
+    sudo find /var/www/html -type f -exec chmod g=rws "{}" \;
     log_message "DEBUG" "deploy-www finished OK"
 }
 
