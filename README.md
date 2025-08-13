@@ -76,6 +76,40 @@ Setup a project:
 ```
 $ ./data-workstation.sh project
 ```
+#### Quarto {#sec-quarto}`
+
+Option: `Add Quarto website to project repository?`
+
+To deploy a Quarto website to the local nginx web server installed by `setup`, see [Deploying Quarto websites](#sec-deploy-quarto)
+
+Note that the Quarto content will be added to `.gitignore` by default (and excluded from your repository). You can easily change this if you want to - see [.gitignore](#sec-gitignore).
+
+#### .gitignore {#sec-gitignore}
+
+Option: `Customize .gitignore?`
+
+Choosing this will add the following to `.gitignore`:
+
+```
+# custom
+.vscode/
+quarto/
+deploy-quarto.sh
+```
+
+This content will be excluded from your repository by default. You can edit `.gitignore` if you want to include these files. 
+
+For more information see:
+
+- [.vscode/](#sec-vs-code)
+- [quarto/](#sec-quarto)
+- [deploy-quarto.sh](#sec-deploy-www)
+
+#### VS Code {#sec-vs-code}`
+
+Option: `Create VS Code settings.json and add venv as default Python interpreter?`
+
+#### Additional steps
 
 After setting up a project, there are a few optional additional steps:
 
@@ -92,7 +126,7 @@ Create a backup:
 $ ./data-workstation.sh project
 ```
 
-### deploy-www
+### deploy-www {#sec-deploy-www}
 
 The `deploy-www` module publishes web content in the given input directory to the given output directory and sets permissions for nginx. 
 
@@ -104,7 +138,7 @@ $ ./data-workstation.sh deploy-www /home/data-workstation-inc-all/projects/my_we
 
 The trailing slashes are necessary, otherwise content will be copied to directory `/var/www/html/published/my_website` instead of `/var/www/html/published`.
 
-#### Deploying Quarto websites
+#### Deploying Quarto websites {#sec-deploy-quarto}
 
 Any Quarto website output directory can be used as with `deploy-www`.
 
