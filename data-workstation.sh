@@ -280,7 +280,7 @@ function setup() {
     apply_update "0001/set_favorite_apps"
     # installs after initial restart
     apply_update "0001/github_authentication"
-    apply_update "0004/install_nginx.sh"
+    apply_update "0004/install_nginx"
     # final restart
     apply_update "0001/final_restart"
     if [ $apply == 1 ]; then
