@@ -21,6 +21,7 @@ N/A
 
 - README: Project module tasks #21
 - Install apt packages (and apt update/upgrade) without prompt #26
+- Replace python3.12-venv #31
 
 ### Removed
 

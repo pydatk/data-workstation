@@ -251,7 +251,7 @@ function setup() {
     apply_update "0001/change_postgres_locale"
     apply_update "0001/revoke_postgres_db_public"
     apply_update "0001/install_quarto_v1-7-32"
-    apply_update "0001/install_python_venv"
+    apply_update "0004/install_python_venv"
     apply_update "0001/install_vs_code"
     apply_update "0001/install_vs_code_extensions"
     apply_update "0001/install_libre_office_calc"
