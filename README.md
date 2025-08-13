@@ -94,7 +94,25 @@ $ ./data-workstation.sh project
 
 ### deploy-www
 
-The `deploy-www` module publishes web content in the given input directory to the given output directory and sets permissions for nginx.
+The `deploy-www` module publishes web content in the given input directory to the given output directory and sets permissions for nginx. 
+
+In this example, content will be copied from `my_website` to `published`, and then available via nginx at [http://localhost/published](http://localhost/published):
+
+```
+$ ./data-workstation.sh deploy-www /home/data-workstation-inc-all/projects/my_website/ /var/www/html/published/
+```
+
+The trailing slashes are necessary, otherwise content will be copied to directory `/var/www/html/published/my_website` instead of `/var/www/html/published`.
+
+#### Automatic deployment after Quarto render
+
+Web content can be set to deploy automatically after `quarto render` by setting the `post-render` option in `_quarto.yml`.
+
+```
+project:
+  type: website
+  post-render: 
+```
 
 ## Tools
 
