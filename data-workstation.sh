@@ -323,10 +323,10 @@ function project() {
     git clone -b $branch https://github.com/$gituser/$gitrepo.git $HOME/projects/$projectdir/$gitrepo
         
     echo ""
-    read -p "Add Quarto 'notes' to project? [y,n] " input
+    read -p "Add Quarto website to project repository? [y,n] " input
     if [ $input == "y" ] || [ $input == "Y" ]; then
         pushd $HOME/projects/$projectdir/$gitrepo
-        quarto create --no-open project website notes
+        quarto create --no-open project website quarto
         popd
     fi
 
