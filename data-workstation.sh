@@ -367,10 +367,15 @@ function project() {
     echo ""
     read -p "Created Python virtual environment: $venvname. Press enter to continue..."
 
+    req="$HOME/data-workstation/updates/0001/requirements.txt"
     echo ""
     read -p "Add default requirements.txt to project? [y,n] " input
     if [ $input == "y" ] || [ $input == "Y" ]; then
-        cp updates/0001/requirements.txt $HOME/projects/$projectdir/$gitrepo      
+        cp $req $HOME/projects/$projectdir/$gitrepo      
+    fi
+    read -p "Install default requirements.txt in project virtual environment? [y,n] " input
+    if [ $input == "y" ] || [ $input == "Y" ]; then
+        "$HOME/venvs/$venvname/bin/python" -m pip install $req    
     fi
 
     echo ""
