@@ -6,6 +6,27 @@ Format is based on: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 data-workstation uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - <mark>2025-08-14</mark>
+
+### Added
+
+- Install nginx & create module for deploying web content locally #30
+
+### Fixed
+
+- Incorrect python.defaultInterpreterPath #27
+- psycopg2 install fails #28
+
+### Changed
+
+- README: Project module tasks #21
+- Install apt packages (and apt update/upgrade) without prompt #26
+- Replace python3.12-venv #31
+
+### Removed
+
+N/A
+
 ## [0.2.0] - 2025-08-12
 
 ### Added

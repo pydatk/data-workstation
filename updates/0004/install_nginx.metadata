@@ -1,0 +1,38 @@
+type:workstation
+name:Install nginx webserver
+Installs an nginx webserver.
+
+The `deploy-www` module in `data-workstation` automates deployment of static web content to a local nginx server. See README.md for more information.
+
+The root nginx web content directory is: `/var/www/html`
+
+The default URL is: [http://localhost/](http://localhost/)
+
+To check the status of nginx:
+
+```
+$ sudo systemctl status nginx
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; preset: enabled)
+     Active: active (running) since Wed 2025-06-11 20:06:19 NZST; 15s ago
+       Docs: man:nginx(8)
+    Process: 9874 ExecStartPre=/usr/sbin/nginx -t -q -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+    Process: 9875 ExecStart=/usr/sbin/nginx -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+   Main PID: 9877 (nginx)
+      Tasks: 9 (limit: 18965)
+     Memory: 6.3M (peak: 6.9M)
+        CPU: 25ms
+```
+
+Set permissions on files in `/var/www/html/` as follows:
+
+- Adds the current user (`$USER`) to group `www-data`
+- Changes ownership for everything (recursively) in `/var/www/html` to `$USER:www-data`.
+
+Incase of any issues with nginx, an error log is available:
+
+```
+$ tail /var/log/nginx/error.log
+```
+
+Reference: @InstallNginx @ConfigureNginx @NginxPermissions

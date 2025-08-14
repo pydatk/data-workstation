@@ -1,4 +1,4 @@
 #!/usr/bin/bash
 set -e
 
-sudo apt install libreoffice-calc
+sudo apt -y install libreoffice-calc

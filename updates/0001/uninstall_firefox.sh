@@ -11,7 +11,7 @@ typeffx=$(type -p firefox)
 
 if [ $typeffx == "/usr/bin/firefox" ]; then
     echo "Removing Firefox with apt"
-    sudo apt remove firefox
+    sudo apt -y remove firefox
 fi
 
 typeffx=$(type -p firefox)
