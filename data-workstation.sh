@@ -375,7 +375,7 @@ function project() {
     fi
     read -p "Install default requirements.txt in project virtual environment? [y,n] " input
     if [ $input == "y" ] || [ $input == "Y" ]; then
-        "$HOME/venvs/$venvname/bin/python" -m pip install $req    
+        "$HOME/venvs/$venvname/bin/python" -m pip install -r $req    
     fi
 
     echo ""
