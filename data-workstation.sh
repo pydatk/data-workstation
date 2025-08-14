@@ -45,7 +45,7 @@ function log_message() {
 log_message "INFO" "=== data-workstation started ==="
 
 # get project version
-version=$(head -n 1 .version)
+version=$(head -n 1 "$HOME/data-workstation/.version")
 version=$(echo "$version" | cut -d ":" -f 2)
 log_message "DEBUG" "data-workstation version: $version"
 
@@ -79,7 +79,7 @@ function check_os() {
 
     # check if OS is supported
     set +e 
-    grout=$(grep "$current_os" .os-support)
+    grout=$(grep "$current_os" "$HOME/data-workstation/.os-support")
     if [ $? != 0 ]; then
         set -e
         log_message "CRITICAL" "Installed Operating System not supported: $current_os"
@@ -125,6 +125,18 @@ else
         module="project"
     elif [ $1 == "backup" ]; then
         module="backup"
+    elif [ $1 == "deploy-www" ]; then
+        module="deploy-www"
+        if [ "$2" == "" ]; then
+            log_message "CRITICAL" "Please specify input and output paths for deploy-www"
+        else
+            wwwin=$2
+        fi
+        if [ "$3" == "" ]; then
+            log_message "CRITICAL" "Please specify input and output paths for deploy-www"
+        else
+            wwwout=$3
+        fi
     else
         log_message "CRITICAL" "Invalid module: $1"
     fi
@@ -237,8 +249,8 @@ function end_data_workstation() {
 function setup() {
     # apt update / upgrade (runs at start of setup each time)
     log_message "INFO" "Applying apt update / upgrade"
-    try_command "sudo apt update" "apt update"
-    try_command "sudo apt upgrade" "apt upgrade"        
+    try_command "sudo apt -y update" "apt update"
+    try_command "sudo apt -y upgrade" "apt upgrade"        
     # check for OS version change as result of apt update/upgrade
     check_os
     # initial setup
@@ -251,7 +263,8 @@ function setup() {
     apply_update "0001/change_postgres_locale"
     apply_update "0001/revoke_postgres_db_public"
     apply_update "0001/install_quarto_v1-7-32"
-    apply_update "0001/install_python_venv"
+    apply_update "0004/install_python_venv"
+    apply_update "0004/psycopg2-dependencies"
     apply_update "0001/install_vs_code"
     apply_update "0001/install_vs_code_extensions"
     apply_update "0001/install_libre_office_calc"
@@ -267,6 +280,7 @@ function setup() {
     apply_update "0001/set_favorite_apps"
     # installs after initial restart
     apply_update "0001/github_authentication"
+    apply_update "0004/install_nginx"
     # final restart
     apply_update "0001/final_restart"
     if [ $apply == 1 ]; then
@@ -323,17 +337,22 @@ function project() {
     git clone -b $branch https://github.com/$gituser/$gitrepo.git $HOME/projects/$projectdir/$gitrepo
         
     echo ""
-    read -p "Add Quarto 'notes' to project? [y,n] " input
+    read -p "Add Quarto website to project repository? [y,n] " input
     if [ $input == "y" ] || [ $input == "Y" ]; then
         pushd $HOME/projects/$projectdir/$gitrepo
-        quarto create --no-open project website notes
+        quarto create --no-open project website quarto
         popd
+        fn="$HOME/projects/$projectdir/$gitrepo/deploy-quarto.sh"
+        echo "#!/usr/bin/bash" > $fn
+        echo "set -e" >> $fn
+        echo "$HOME/data-workstation/data-workstation.sh deploy-www $HOME/projects/$projectdir/$gitrepo/quarto/_site/ /var/www/html/$projectdir/" >> $fn
+        chmod +x $fn
     fi
 
     echo ""
     read -p "Customize .gitignore? [y,n] " input
     if [ $input == "y" ] || [ $input == "Y" ]; then
-        echo -e "# custom\n.vscode/\nnotes\n" > /tmp/.gitignore
+        echo -e "# custom\n.vscode/\nquarto/\ndeploy-quarto.sh\n" > /tmp/.gitignore
         cat $HOME/projects/$projectdir/$gitrepo/.gitignore >> /tmp/.gitignore
         mv /tmp/.gitignore $HOME/projects/$projectdir/$gitrepo/.gitignore
     fi
@@ -348,10 +367,15 @@ function project() {
     echo ""
     read -p "Created Python virtual environment: $venvname. Press enter to continue..."
 
+    req="$HOME/data-workstation/updates/0001/requirements.txt"
     echo ""
     read -p "Add default requirements.txt to project? [y,n] " input
     if [ $input == "y" ] || [ $input == "Y" ]; then
-        cp updates/0001/requirements.txt $HOME/projects/$projectdir/$gitrepo      
+        cp $req $HOME/projects/$projectdir/$gitrepo      
+    fi
+    read -p "Install default requirements.txt in project virtual environment? [y,n] " input
+    if [ $input == "y" ] || [ $input == "Y" ]; then
+        "$HOME/venvs/$venvname/bin/python" -m pip install -r $req    
     fi
 
     echo ""
@@ -370,7 +394,7 @@ function project() {
     if [ $input == "y" ] || [ $input == "Y" ]; then
         mkdir -p $HOME/projects/$projectdir/$gitrepo/.vscode
         echo -e "{" > $HOME/projects/$projectdir/$gitrepo/.vscode/settings.json
-        echo -e "    \"python.defaultInterpreterPath\": \"$HOME/venv/$projectdir-$venvts/bin/python\"" >> $HOME/projects/$projectdir/$gitrepo/.vscode/settings.json 
+        echo -e "    \"python.defaultInterpreterPath\": \"$HOME/venvs/$projectdir-$venvts/bin/python\"" >> $HOME/projects/$projectdir/$gitrepo/.vscode/settings.json 
         echo -e "}" >> $HOME/projects/$projectdir/$gitrepo/.vscode/settings.json 
     fi
 
@@ -484,6 +508,18 @@ function backup() {
 
 }
 
+function deploy-www() {
+    log_message "DEBUG" "Copying files from $wwwin to $wwwout"
+    try_command "rsync -r --delete $wwwin $wwwout"
+    log_message "DEBUG" "Changing permissions in $wwwout"
+    try_command "sudo chown $USER:www-data -R $wwwout"
+    try_command "sudo chmod u=rwX,g=srX,o=rX -R $wwwout"
+    # can't use try_command with find
+    sudo find /var/www/html -type d -exec chmod g=rwxs "{}" \;
+    sudo find /var/www/html -type f -exec chmod g=rws "{}" \;
+    log_message "DEBUG" "deploy-www finished OK"
+}
+
 # run module
 if [ $module == "setup" ]; then    
     log_message "INFO" "Started $module"
@@ -492,7 +528,7 @@ if [ $module == "setup" ]; then
     # to do system check
     system_check 
     log_message "INFO" "Finished $module"
-elif [ $module == "backup" ] || [ $module == "project" ]; then
+elif [ $module == "backup" ] || [ $module == "project" ] || [ $module == "deploy-www" ]; then
     log_message "INFO" "Started $module"
     system_check # do security check before module
     $module
