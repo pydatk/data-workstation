@@ -324,7 +324,8 @@ function project() {
 
     log_message "INFO" "Started project module"
     
-    read -p "Project name (e.g. myproject): " projectdir
+    echo -e "\nProject names can contain letters, numbers and underscores, starting with a letter."
+    read -p "Project name: " projectdir
     read -p "GitHub repository name (e.g. test-project-public): " gitrepo
     read -p "GitHub repository owner user name (e.g. pydatk): " gituser
     read -p "GitHub repository branch (e.g. main): " branch

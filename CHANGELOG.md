@@ -6,7 +6,7 @@ Format is based on: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 data-workstation uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - <mark>2025-08-14</mark>
+## [0.3.0] - 2025-08-15
 
 ### Added
 

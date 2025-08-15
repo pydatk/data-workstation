@@ -45,6 +45,12 @@ To clone the `data-workstation` repository into `~/data-workstation`:
 $ git clone https://github.com/pydatk/data-workstation.git ~/data-workstation/
 ```
 
+Or in one line:
+
+```
+$ sudo apt install git && git clone https://github.com/pydatk/data-workstation.git ~/data-workstation/
+```
+
 To update (recommended each time you run `data-workstation`):
 
 ```
@@ -117,6 +123,23 @@ After setting up a project, there are a few optional additional steps:
 - To install packages using pip, use the python command in the virtual environment explicitly. If pip is called accidentally without an active virtual environment, it will install packages to the global Python.
     - To install a named package: `(intranet-250811-1124) dev@dev:~/projects/intranet/intranet$ ~/venvs/intranet-250811-1124/bin/python -m pip install <<package_name>>`
     - To install all packages in the `requirements.txt` file: `(intranet-250811-1124) dev@dev:~/projects/intranet/intranet$ ~/venvs/intranet-250811-1124/bin/python -m pip install -r requirements.txt`
+
+#### Deleting a project
+
+1. Make sure data is backed up (for the entire machine, not just the project).
+1. Delete the project's PostgreSQL database(s) and user(s):
+  1. Login to psql: `$ sudo -u postgres psql`
+  1. List databases: `# \l`
+  1. Delete database: `# drop database <<db-name>>;`
+  1. Confirm deletion: `# \l`
+  1. List users: `# \du`
+  1. Delete user: `# drop user intranet_owner;`
+  1. Confirm deletion: `# \du`
+1. Delete local web content from the project: `/var/www/html/<<project>>`
+1. Delete the project's virtual environment(s): `~/venvs/<<project>>*`
+1. Delete the project workspace from `~/workspaces`
+1. Delete the project directory: `~/projects/<<project>>`
+1. Delete project credentials, secrets, keys, etc from any password management software you use.
 
 ### backup
 
